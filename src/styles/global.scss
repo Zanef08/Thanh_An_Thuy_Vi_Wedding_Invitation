@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Great+Vibes&family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import './variables';
+@import './mixins';
+@import './reset';
+
+body {
+  font-family: $font-family-primary;
+  background-color: $color-background;
+  color: $color-text-primary;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+// Global container
+.container {
+  @include container;
+}
+
+// Global button styles
+.btn {
+  @include button-primary;
+}
+
+// Global text styles
+.text-center {
+  text-align: center;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+// Global spacing utilities
+.mt-1 { margin-top: $spacing-xs; }
+.mt-2 { margin-top: $spacing-sm; }
+.mt-3 { margin-top: $spacing-md; }
+.mt-4 { margin-top: $spacing-lg; }
+.mt-5 { margin-top: $spacing-xl; }
+
+.mb-1 { margin-bottom: $spacing-xs; }
+.mb-2 { margin-bottom: $spacing-sm; }
+.mb-3 { margin-bottom: $spacing-md; }
+.mb-4 { margin-bottom: $spacing-lg; }
+.mb-5 { margin-bottom: $spacing-xl; }
+
+.pt-1 { padding-top: $spacing-xs; }
+.pt-2 { padding-top: $spacing-sm; }
+.pt-3 { padding-top: $spacing-md; }
+.pt-4 { padding-top: $spacing-lg; }
+.pt-5 { padding-top: $spacing-xl; }
+
+.pb-1 { padding-bottom: $spacing-xs; }
+.pb-2 { padding-bottom: $spacing-sm; }
+.pb-3 { padding-bottom: $spacing-md; }
+.pb-4 { padding-bottom: $spacing-lg; }
+.pb-5 { padding-bottom: $spacing-xl; }
+
+// Utility classes for flexbox
+.d-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.flex-center {
+  @include flex-center;
+}
+
+.flex-column-center {
+  @include flex-column-center;
+}
