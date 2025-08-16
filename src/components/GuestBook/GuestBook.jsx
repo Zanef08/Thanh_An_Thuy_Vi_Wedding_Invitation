@@ -11,29 +11,7 @@ const GuestBook = () => {
   const [signature, setSignature] = useState('');
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
-  const [guestEntries, setGuestEntries] = useState([
-    {
-      id: 1,
-      name: 'Nguyễn Văn A',
-      message: 'Chúc mừng cô dâu chú rể! Mong các bạn sẽ có một cuộc sống hạnh phúc bên nhau.',
-      date: '2024-12-15',
-      time: '14:30'
-    },
-    {
-      id: 2,
-      name: 'Trần Thị B',
-      message: 'Thật vui khi được tham dự lễ cưới của hai bạn. Chúc các bạn mãi mãi yêu thương nhau!',
-      date: '2024-12-15',
-      time: '15:45'
-    },
-    {
-      id: 3,
-      name: 'Lê Văn C',
-      message: 'Một ngày trọng đại thật đẹp! Chúc hai bạn sẽ có nhiều kỷ niệm đáng nhớ trong cuộc sống hôn nhân.',
-      date: '2024-12-15',
-      time: '16:20'
-    }
-  ]);
+  const [guestEntries, setGuestEntries] = useState([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -50,7 +28,22 @@ const GuestBook = () => {
     context.strokeStyle = '#333333';
     context.lineWidth = 2;
     contextRef.current = context;
+
+    // Load existing guestbook entries
+    loadGuestbookEntries();
   }, []);
+
+  const loadGuestbookEntries = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/guestbook');
+      if (response.ok) {
+        const data = await response.json();
+        setGuestEntries(data.data || []);
+      }
+    } catch (error) {
+      console.error('Error loading guestbook entries:', error);
+    }
+  };
 
   const getCoordinates = (event) => {
     const canvas = canvasRef.current;
@@ -110,35 +103,61 @@ const GuestBook = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!guestName.trim() || !message.trim()) {
       alert('Vui lòng điền đầy đủ thông tin');
       return;
     }
 
-    const newEntry = {
-      id: Date.now(),
-      name: guestName,
-      message: message,
-      signature: signature,
-      date: new Date().toISOString().split('T')[0],
-      time: new Date().toLocaleTimeString('vi-VN', {
-        hour: '2-digit',
-        minute: '2-digit'
-      })
-    };
+    try {
+      const response = await fetch('http://localhost:5000/api/guestbook', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: guestName,
+          message: message,
+          signature: signature
+        })
+      });
 
-    setGuestEntries(prev => [newEntry, ...prev]);
-    setGuestName('');
-    setMessage('');
-    setSignature('');
-    clearSignature();
-    setIsSubmitted(true);
+      const result = await response.json();
 
-    setTimeout(() => {
-      setIsSubmitted(false);
-    }, 2000);
+      if (response.ok) {
+        console.log('Guestbook entry submitted successfully:', result);
+        
+        // Add new entry to the list
+        const newEntry = {
+          id: result.data.id,
+          name: guestName,
+          message: message,
+          signature: signature,
+          date: new Date().toISOString().split('T')[0],
+          time: new Date().toLocaleTimeString('vi-VN', {
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+        };
+
+        setGuestEntries(prev => [newEntry, ...prev]);
+        setGuestName('');
+        setMessage('');
+        setSignature('');
+        clearSignature();
+        setIsSubmitted(true);
+
+        setTimeout(() => {
+          setIsSubmitted(false);
+        }, 2000);
+      } else {
+        alert(result.error || 'Có lỗi xảy ra khi gửi lời chúc');
+      }
+    } catch (error) {
+      console.error('Guestbook submission error:', error);
+      alert('Lỗi kết nối. Vui lòng thử lại sau.');
+    }
   };
 
   return (

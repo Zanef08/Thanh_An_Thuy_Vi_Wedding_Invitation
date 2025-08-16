@@ -7,6 +7,7 @@ import ImageSlider from '../../components/ImageSlider';
 import RSVP from '../../components/RSVP';
 import WeddingGift from '../../components/WeddingGift';
 import GuestBook from '../../components/GuestBook';
+import Navigation from '../../components/Navigation';
 import { ChurchIcon, ChampagneIcon } from '../../components/Icons';
 // Sử dụng hình ảnh thật từ folder assets
 const heroImage = '/assets/4.jpg';
@@ -26,8 +27,11 @@ const Home = () => {
 
   return (
     <div className={styles.home}>
+      {/* Navigation */}
+      <Navigation />
+      
       {/* Hero Section with Couple Photo */}
-      <section className={styles.hero}>
+      <section id="hero" className={styles.hero}>
         <div className={styles.heroImage} style={{ backgroundImage: `url(${heroImage})` }}>
           <div className={styles.heroOverlay}>
             <motion.div
@@ -45,12 +49,12 @@ const Home = () => {
       </section>
 
       {/* Countdown Section */}
-      <section className={styles.countdownSection}>
+      <section id="countdown" className={styles.countdownSection}>
         <Countdown />
       </section>
 
       {/* Wedding Date Section */}
-      <section className={styles.dateSection}>
+      <section id="date" className={styles.dateSection}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -75,7 +79,7 @@ const Home = () => {
       </section>
 
       {/* Ceremony Section */}
-      <section className={styles.ceremonySection}>
+      <section id="ceremony" className={styles.ceremonySection}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -94,7 +98,7 @@ const Home = () => {
       </section>
 
       {/* Party Section */}
-      <section className={styles.partySection}>
+      <section id="party" className={styles.partySection}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -113,7 +117,7 @@ const Home = () => {
       </section>
 
              {/* Timeline Section */}
-       <section className={styles.timelineSection}>
+       <section id="timeline" className={styles.timelineSection}>
          <motion.div
            initial={{ opacity: 0, y: 20 }}
            whileInView={{ opacity: 1, y: 0 }}
@@ -125,17 +129,17 @@ const Home = () => {
        </section>
 
       {/* RSVP Section */}
-      <section className={styles.rsvpSection}>
+      <section id="rsvp" className={styles.rsvpSection}>
         <RSVP />
       </section>
 
       {/* Wedding Gift Section */}
-      <section className={styles.giftSection}>
+      <section id="gift" className={styles.giftSection}>
         <WeddingGift />
       </section>
 
       {/* Guest Book Section */}
-      <section className={styles.guestBookSection}>
+      <section id="guestbook" className={styles.guestBookSection}>
         <GuestBook />
       </section>
 
@@ -145,7 +149,7 @@ const Home = () => {
       </section>
 
              {/* Image Slider Section */}
-       <section className={styles.imageSliderSection}>
+       <section id="gallery" className={styles.imageSliderSection}>
          <motion.div
            initial={{ opacity: 0, y: 20 }}
            whileInView={{ opacity: 1, y: 0 }}

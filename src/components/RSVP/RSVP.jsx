@@ -23,24 +23,43 @@ const RSVP = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
-    console.log('RSVP submitted:', formData);
-    setIsSubmitted(true);
     
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        guests: 1,
-        attending: 'yes',
-        dietaryRestrictions: ''
+    try {
+      const response = await fetch('http://localhost:5000/api/rsvp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
       });
-    }, 3000);
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log('RSVP submitted successfully:', result);
+        setIsSubmitted(true);
+        
+        // Reset form after 3 seconds
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setFormData({
+            name: '',
+            email: '',
+            phone: '',
+            guests: 1,
+            attending: 'yes',
+            dietaryRestrictions: ''
+          });
+        }, 3000);
+      } else {
+        alert(result.error || 'Có lỗi xảy ra khi gửi RSVP');
+      }
+    } catch (error) {
+      console.error('RSVP submission error:', error);
+      alert('Lỗi kết nối. Vui lòng thử lại sau.');
+    }
   };
 
   return (
