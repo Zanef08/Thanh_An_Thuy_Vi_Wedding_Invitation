@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Countdown from '../../components/Countdown';
 import EventSection from '../../components/EventSection';
@@ -14,6 +14,44 @@ const bottomImage = '/assets/5.jpg';
 import styles from './Home.module.scss';
 
 const Home = () => {
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [activeSection, setActiveSection] = useState('hero');
+
+  const sections = [
+    { id: 'hero', label: 'Trang chủ' },
+    { id: 'countdown', label: 'Đếm ngược' },
+    { id: 'date', label: 'Ngày cưới' },
+    { id: 'ceremony', label: 'Lễ cưới' },
+    { id: 'party', label: 'Tiệc cưới' },
+    { id: 'timeline', label: 'Lịch trình' },
+    { id: 'rsvp', label: 'RSVP' },
+    { id: 'gift', label: 'Quà cưới' },
+    { id: 'guestbook', label: 'Sổ lưu bút' },
+    { id: 'gallery', label: 'Thư viện ảnh' }
+  ];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      setScrollProgress(scrollPercent);
+
+      // Update active section
+      const scrollPosition = window.scrollY + 200;
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = document.getElementById(sections[i].id);
+        if (section && section.offsetTop <= scrollPosition) {
+          setActiveSection(sections[i].id);
+          break;
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [sections]);
+
   const handleLocationClick = (location) => {
     // Mock function - in real app would open maps
     console.log(`Opening location: ${location}`);
@@ -24,22 +62,102 @@ const Home = () => {
     window.open('https://instagram.com/thanhan_thuyvi', '_blank');
   };
 
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
+  // Animation variants for sections
+  const sectionVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
   return (
     <div className={styles.home}>
+      {/* Scroll Progress Indicator */}
+      <div className={styles.scrollProgress}>
+        <motion.div
+          className={styles.scrollProgressBar}
+          style={{
+            width: `${scrollProgress}%`,
+            height: '100%',
+            background: 'linear-gradient(90deg, #333, #666)',
+            transition: 'width 0.1s ease'
+          }}
+        />
+      </div>
+
+      {/* Section Indicators */}
+      <div className={styles.sectionIndicator}>
+        {sections.map((section) => (
+          <motion.div
+            key={section.id}
+            className={`${styles.indicatorDot} ${activeSection === section.id ? styles.active : ''}`}
+            onClick={() => scrollToSection(section.id)}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
+            title={section.label}
+          />
+        ))}
+      </div>
       
       {/* Hero Section with Couple Photo */}
       <section id="hero" className={styles.hero}>
-        <div className={styles.heroImage} style={{ backgroundImage: `url(${heroImage})` }}>
+        <div className={`${styles.heroImage} bottom-blur`} style={{ backgroundImage: `url(${heroImage})` }}>
           <div className={styles.heroOverlay}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
               className={styles.heroContent}
             >
-                             <h1 className={styles.announcement}>lỄ CƯỚI</h1>
-               <h2 className={styles.coupleNames}>Thanh An & Thuy Vi</h2>
-                             <p className={styles.date}>27.09.2025</p>
+              <motion.h1 
+                className={styles.announcement}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
+                LỄ CƯỚI
+              </motion.h1>
+              <motion.h2 
+                className={styles.coupleNames}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+              >
+                Thanh An & Thuy Vi
+              </motion.h2>
+              <motion.p 
+                className={styles.date}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+              >
+                27.09.2025
+              </motion.p>
             </motion.div>
           </div>
         </div>
@@ -47,43 +165,59 @@ const Home = () => {
 
       {/* Countdown Section */}
       <section id="countdown" className={styles.countdownSection}>
-        <Countdown />
+        <motion.div
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <Countdown />
+        </motion.div>
       </section>
 
       {/* Wedding Date Section */}
       <section id="date" className={styles.dateSection}>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
           className={styles.dateContent}
         >
-                     <p className={styles.invitationText}>
-             Chúng tôi mời bạn đến<br />
-             dự lễ cưới của chúng tôi
-           </p>
-          <div className={styles.dateDisplay}>
-            <div className={styles.dateLine}></div>
-                         <span className={styles.dayName}>THỨ BẢY</span>
-             <div className={styles.dateLine}></div>
-             <span className={styles.dayNumber}>27</span>
-             <div className={styles.dateLine}></div>
-             <span className={styles.monthName}>THÁNG 9</span>
-            <div className={styles.dateLine}></div>
-          </div>
+          <motion.p 
+            className={styles.invitationText}
+            variants={sectionVariants}
+          >
+            Chúng tôi mời bạn đến<br />
+            dự lễ cưới của chúng tôi
+          </motion.p>
+          <motion.div 
+            className={styles.dateDisplay}
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <motion.div className={styles.dateLine} variants={sectionVariants}></motion.div>
+            <motion.span className={styles.dayName} variants={sectionVariants}>THỨ BẢY</motion.span>
+            <motion.div className={styles.dateLine} variants={sectionVariants}></motion.div>
+            <motion.span className={styles.dayNumber} variants={sectionVariants}>27</motion.span>
+            <motion.div className={styles.dateLine} variants={sectionVariants}></motion.div>
+            <motion.span className={styles.monthName} variants={sectionVariants}>THÁNG 9</motion.span>
+            <motion.div className={styles.dateLine} variants={sectionVariants}></motion.div>
+          </motion.div>
         </motion.div>
       </section>
 
       {/* Ceremony Section */}
       <section id="ceremony" className={styles.ceremonySection}>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
         >
-                               <EventSection
+          <EventSection
             title="Lễ Cưới"
             time="15:00 giờ"
             location="Nhà thờ"
@@ -97,12 +231,12 @@ const Home = () => {
       {/* Party Section */}
       <section id="party" className={styles.partySection}>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
         >
-                               <EventSection
+          <EventSection
             title="Tiệc Cưới"
             time="18:30 giờ"
             location="Nhà hàng"
@@ -113,49 +247,77 @@ const Home = () => {
         </motion.div>
       </section>
 
-             {/* Timeline Section */}
-       <section id="timeline" className={styles.timelineSection}>
-         <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           transition={{ duration: 0.6 }}
-           viewport={{ once: true }}
-         >
-           <Timeline />
-         </motion.div>
-       </section>
+      {/* Timeline Section */}
+      <section id="timeline" className={styles.timelineSection}>
+        <motion.div
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <Timeline />
+        </motion.div>
+      </section>
 
       {/* RSVP Section */}
       <section id="rsvp" className={styles.rsvpSection}>
-        <RSVP />
+        <motion.div
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <RSVP />
+        </motion.div>
       </section>
 
       {/* Wedding Gift Section */}
       <section id="gift" className={styles.giftSection}>
-        <WeddingGift />
+        <motion.div
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <WeddingGift />
+        </motion.div>
       </section>
 
       {/* Guest Book Section */}
       <section id="guestbook" className={styles.guestBookSection}>
-        <GuestBook />
+        <motion.div
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <GuestBook />
+        </motion.div>
       </section>
 
       {/* Bottom Couple Photo */}
       <section className={styles.bottomPhoto}>
-        <div className={styles.bottomImage} style={{ backgroundImage: `url(${bottomImage})` }}></div>
+        <motion.div 
+          className={styles.bottomImage} 
+          style={{ backgroundImage: `url(${bottomImage})` }}
+          initial={{ opacity: 0, scale: 1.1 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.2 }}
+          viewport={{ once: true }}
+        />
       </section>
 
-             {/* Image Slider Section */}
-       <section id="gallery" className={styles.imageSliderSection}>
-         <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           transition={{ duration: 0.6 }}
-           viewport={{ once: true }}
-         >
-           <ImageSlider />
-         </motion.div>
-       </section>
+      {/* Image Slider Section */}
+      <section id="gallery" className={styles.imageSliderSection}>
+        <motion.div
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <ImageSlider />
+        </motion.div>
+      </section>
     </div>
   );
 };

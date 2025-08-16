@@ -28,6 +28,8 @@
 
 .sliderTitle {
   @include heading-primary;
+  font-family: $font-family-title;
+  font-style: italic;
   font-size: $font-size-xl;
   color: $color-text-primary;
   margin-bottom: $spacing-lg;

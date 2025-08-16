@@ -37,6 +37,8 @@
 
 .title {
   @include heading-primary;
+  font-family: $font-family-title;
+  font-style: italic;
   font-size: $font-size-xl;
   margin-bottom: $spacing-lg;
   text-transform: uppercase;
@@ -69,6 +71,8 @@
 .formSection,
 .entriesSection {
   .sectionTitle {
+    font-family: $font-family-title;
+    font-style: italic;
     font-size: $font-size-lg;
     font-weight: $font-weight-semibold;
     color: $color-text-primary;

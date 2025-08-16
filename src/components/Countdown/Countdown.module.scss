@@ -13,6 +13,8 @@
 
 .title {
   @include heading-primary;
+  font-family: $font-family-title;
+  font-style: italic;
   font-size: $font-size-xl;
   text-transform: uppercase;
   margin-bottom: $spacing-2xl;

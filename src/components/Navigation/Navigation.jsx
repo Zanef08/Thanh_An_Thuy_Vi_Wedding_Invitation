@@ -45,12 +45,12 @@ const Navigation = () => {
       }
 
       // Show navigation after scrolling down a bit (only on desktop/tablet)
-      const isMobile = window.innerWidth < 576;
+      const isMobile = window.innerWidth < 768;
       setIsVisible(!isMobile && window.scrollY > 300);
     };
 
     // Set initial visibility based on screen size
-    const isMobile = window.innerWidth < 576;
+    const isMobile = window.innerWidth < 768;
     setIsVisible(!isMobile);
 
     window.addEventListener('scroll', handleScroll);
@@ -65,10 +65,19 @@ const Navigation = () => {
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
+      // Add smooth scrolling behavior
       element.scrollIntoView({ 
         behavior: 'smooth',
         block: 'start'
       });
+      
+      // Update active section immediately for better UX
+      setActiveSection(sectionId);
+      
+      // Add a small delay to ensure smooth transition
+      setTimeout(() => {
+        setActiveSection(sectionId);
+      }, 100);
     }
   };
 
@@ -80,11 +89,16 @@ const Navigation = () => {
         x: isVisible ? 0 : -100, 
         opacity: isVisible ? 1 : 0 
       }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
     >
       <div className={styles.timelineContainer}>
         {/* Main vertical line */}
-        <div className={styles.timelineLine}></div>
+        <motion.div 
+          className={styles.timelineLine}
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
+          transition={{ duration: 1, delay: 0.5 }}
+        />
         
         {/* Navigation items */}
         <nav className={styles.timelineNav}>
@@ -94,26 +108,63 @@ const Navigation = () => {
               className={styles.timelineItem}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ delay: index * 0.1 + 0.8 }}
             >
               {/* Timeline dot */}
-              <div className={`${styles.timelineDot} ${activeSection === section.id ? styles.active : ''}`}></div>
+              <motion.div 
+                className={`${styles.timelineDot} ${activeSection === section.id ? styles.active : ''}`}
+                animate={{
+                  scale: activeSection === section.id ? 1.2 : 1,
+                  backgroundColor: activeSection === section.id ? '#000' : 'rgba(0, 0, 0, 0.3)'
+                }}
+                transition={{ duration: 0.3 }}
+              />
               
               {/* Horizontal branch line */}
-              <div className={`${styles.branchLine} ${activeSection === section.id ? styles.active : ''}`}></div>
+              <motion.div 
+                className={`${styles.branchLine} ${activeSection === section.id ? styles.active : ''}`}
+                animate={{
+                  width: activeSection === section.id ? '25px' : '20px',
+                  backgroundColor: activeSection === section.id ? '#000' : 'rgba(0, 0, 0, 0.4)'
+                }}
+                transition={{ duration: 0.3 }}
+              />
               
               {/* Navigation button */}
               <motion.button
                 className={`${styles.navButton} ${activeSection === section.id ? styles.active : ''}`}
                 onClick={() => scrollToSection(section.id)}
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ 
+                  scale: 1.05,
+                  x: 5
+                }}
                 whileTap={{ scale: 0.95 }}
                 title={section.label}
+                animate={{
+                  x: activeSection === section.id ? 8 : 0
+                }}
+                transition={{ duration: 0.3 }}
               >
-                <span className={styles.navIcon}>
+                <motion.span 
+                  className={styles.navIcon}
+                  animate={{
+                    scale: activeSection === section.id ? 1.2 : 1,
+                    opacity: activeSection === section.id ? 1 : 0.7
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
                   <section.icon />
-                </span>
-                <span className={styles.navLabel}>{section.label}</span>
+                </motion.span>
+                <motion.span 
+                  className={styles.navLabel}
+                  animate={{
+                    color: activeSection === section.id ? '#000' : '#666',
+                    fontWeight: activeSection === section.id ? 'bold' : 'medium'
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {section.label}
+                </motion.span>
               </motion.button>
             </motion.div>
           ))}
