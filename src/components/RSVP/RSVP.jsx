@@ -27,38 +27,37 @@ const RSVP = () => {
     e.preventDefault();
     
     try {
-      const response = await fetch('http://localhost:5000/api/rsvp', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
+      // Create new RSVP entry
+      const newRsvp = {
+        id: Date.now().toString(),
+        ...formData,
+        submittedAt: new Date().toISOString()
+      };
 
-      const result = await response.json();
+      // Store in localStorage
+      const existingRsvps = JSON.parse(localStorage.getItem('rsvpEntries') || '[]');
+      const updatedRsvps = [...existingRsvps, newRsvp];
+      localStorage.setItem('rsvpEntries', JSON.stringify(updatedRsvps));
 
-      if (response.ok) {
-        console.log('RSVP submitted successfully:', result);
-        setIsSubmitted(true);
-        
-        // Reset form after 3 seconds
-        setTimeout(() => {
-          setIsSubmitted(false);
-          setFormData({
-            name: '',
-            email: '',
-            phone: '',
-            guests: 1,
-            attending: 'yes',
-            dietaryRestrictions: ''
-          });
-        }, 3000);
-      } else {
-        alert(result.error || 'Có lỗi xảy ra khi gửi RSVP');
-      }
+      console.log('RSVP submitted successfully:', newRsvp);
+      setIsSubmitted(true);
+      
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          guests: 1,
+          attending: 'yes',
+          dietaryRestrictions: ''
+        });
+      }, 3000);
+      
     } catch (error) {
       console.error('RSVP submission error:', error);
-      alert('Lỗi kết nối. Vui lòng thử lại sau.');
+      alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
     }
   };
 

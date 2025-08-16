@@ -29,16 +29,15 @@ const GuestBook = () => {
     context.lineWidth = 2;
     contextRef.current = context;
 
-    // Load existing guestbook entries
+    // Load existing guestbook entries from localStorage
     loadGuestbookEntries();
   }, []);
 
-  const loadGuestbookEntries = async () => {
+  const loadGuestbookEntries = () => {
     try {
-      const response = await fetch('http://localhost:5000/api/guestbook');
-      if (response.ok) {
-        const data = await response.json();
-        setGuestEntries(data.data || []);
+      const storedEntries = localStorage.getItem('guestbookEntries');
+      if (storedEntries) {
+        setGuestEntries(JSON.parse(storedEntries));
       }
     } catch (error) {
       console.error('Error loading guestbook entries:', error);
@@ -111,52 +110,38 @@ const GuestBook = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/guestbook', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: guestName,
-          message: message,
-          signature: signature
+      // Create new entry
+      const newEntry = {
+        id: Date.now().toString(),
+        name: guestName,
+        message: message,
+        signature: signature,
+        date: new Date().toISOString().split('T')[0],
+        time: new Date().toLocaleTimeString('vi-VN', {
+          hour: '2-digit',
+          minute: '2-digit'
         })
-      });
+      };
 
-      const result = await response.json();
+      // Add to localStorage
+      const updatedEntries = [newEntry, ...guestEntries];
+      localStorage.setItem('guestbookEntries', JSON.stringify(updatedEntries));
+      
+      // Update state
+      setGuestEntries(updatedEntries);
+      setGuestName('');
+      setMessage('');
+      setSignature('');
+      clearSignature();
+      setIsSubmitted(true);
 
-      if (response.ok) {
-        console.log('Guestbook entry submitted successfully:', result);
-        
-        // Add new entry to the list
-        const newEntry = {
-          id: result.data.id,
-          name: guestName,
-          message: message,
-          signature: signature,
-          date: new Date().toISOString().split('T')[0],
-          time: new Date().toLocaleTimeString('vi-VN', {
-            hour: '2-digit',
-            minute: '2-digit'
-          })
-        };
-
-        setGuestEntries(prev => [newEntry, ...prev]);
-        setGuestName('');
-        setMessage('');
-        setSignature('');
-        clearSignature();
-        setIsSubmitted(true);
-
-        setTimeout(() => {
-          setIsSubmitted(false);
-        }, 2000);
-      } else {
-        alert(result.error || 'Có lỗi xảy ra khi gửi lời chúc');
-      }
+      setTimeout(() => {
+        setIsSubmitted(false);
+      }, 2000);
+      
     } catch (error) {
       console.error('Guestbook submission error:', error);
-      alert('Lỗi kết nối. Vui lòng thử lại sau.');
+      alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
     }
   };
 
