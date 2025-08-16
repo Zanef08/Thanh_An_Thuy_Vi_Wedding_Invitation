@@ -13,14 +13,14 @@ const WeddingGift = () => {
       bank: 'VPBANK',
       accountName: 'PHAM HUYNH THUY VI',
       accountNumber: '09876543210987654321',
-      qrCode: '/qr-bride.png' 
+      qrCode: '/bride.png' 
     },
     groom: {
       title: 'Mừng cưới đến chú rể',
-      bank: 'UNKNOWN',
+      bank: 'TECHCOMBANK',
       accountName: 'TRAN THANH AN',
-      accountNumber: '09876543210987654321',
-      qrCode: '/qr-groom.png' 
+      accountNumber: '6688 2909 1998',
+      qrCode: '/qrgroom.png' 
     }
   };
 
@@ -94,12 +94,21 @@ const WeddingGift = () => {
               
               <div className={styles.qrSection}>
                 <div className={styles.qrCode}>
-                  <div className={styles.qrPlaceholder}>
-                    <div className={styles.qrText}>QR Code</div>
-                    <div className={styles.qrSubtext}>
-                      {selectedRecipient === 'bride' ? 'VIETQR • napas 247' : 'ACB'}
-                    </div>
-                  </div>
+                  {selectedRecipient === 'groom' ? (
+                    <>
+                      <img 
+                        src={currentInfo.qrCode} 
+                        alt={`QR Code ${currentInfo.bank}`}
+                        className={styles.qrImage}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <div className={styles.qrPlaceholder}>
+                        <div className={styles.qrText}>QR Code</div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
