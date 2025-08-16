@@ -7,7 +7,6 @@ import ImageSlider from '../../components/ImageSlider';
 import RSVP from '../../components/RSVP';
 import WeddingGift from '../../components/WeddingGift';
 import GuestBook from '../../components/GuestBook';
-import Navigation from '../../components/Navigation';
 import { ChurchIcon, ChampagneIcon } from '../../components/Icons';
 // Sử dụng hình ảnh thật từ folder assets
 const heroImage = '/assets/4.jpg';
@@ -27,8 +26,6 @@ const Home = () => {
 
   return (
     <div className={styles.home}>
-      {/* Navigation */}
-      <Navigation />
       
       {/* Hero Section with Couple Photo */}
       <section id="hero" className={styles.hero}>
