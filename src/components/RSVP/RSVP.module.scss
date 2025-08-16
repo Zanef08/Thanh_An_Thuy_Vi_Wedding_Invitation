@@ -1,0 +1,234 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.rsvp {
+  @include flex-column-center;
+  padding: $spacing-2xl 0;
+  text-align: center;
+  
+  @include tablet-up {
+    padding: $spacing-3xl 0;
+  }
+}
+
+.container {
+  @include container;
+  max-width: 600px;
+}
+
+.iconContainer {
+  @include flex-center;
+  margin-bottom: $spacing-lg;
+}
+
+.icon {
+  width: 48px;
+  height: 48px;
+  color: $color-text-primary;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  fill: none;
+  
+  @include tablet-up {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+.title {
+  @include heading-primary;
+  font-size: $font-size-xl;
+  margin-bottom: $spacing-lg;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  
+  @include tablet-up {
+    font-size: $font-size-2xl;
+  }
+}
+
+.subtitle {
+  @include body-text;
+  font-size: $font-size-base;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xl;
+  line-height: 1.4;
+  
+  @include tablet-up {
+    font-size: $font-size-lg;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-xl;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  text-align: left;
+
+  label {
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+    font-size: $font-size-sm;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: $spacing-sm $spacing-md;
+    border: 1px solid #e1e5e9;
+    border-radius: $border-radius-md;
+    font-size: $font-size-base;
+    transition: $transition-base;
+    background: white;
+    font-family: $font-family-primary;
+
+    &:focus {
+      outline: none;
+      border-color: $color-text-primary;
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-top: $spacing-xs;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  cursor: pointer;
+  padding: $spacing-sm $spacing-md;
+  border: 1px solid #e1e5e9;
+  border-radius: $border-radius-md;
+  transition: $transition-base;
+  background: white;
+
+  &:hover {
+    border-color: $color-text-primary;
+  }
+
+  input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    accent-color: $color-text-primary;
+    margin: 0;
+  }
+
+  .radioText {
+    font-weight: $font-weight-normal;
+    color: $color-text-primary;
+  }
+}
+
+.submitButton {
+  min-width: 200px;
+  margin: 0 auto;
+  
+  @include tablet-up {
+    min-width: 220px;
+  }
+}
+
+.successMessage {
+  text-align: center;
+  padding: $spacing-xl;
+
+  .successIcon {
+    width: 60px;
+    height: 60px;
+    background: $color-text-primary;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+    margin: 0 auto $spacing-lg;
+    animation: pulse 2s infinite;
+  }
+
+  h3 {
+    font-size: $font-size-xl;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+    font-weight: $font-weight-semibold;
+  }
+
+  p {
+    color: $color-text-primary;
+    font-size: $font-size-base;
+    line-height: 1.6;
+    margin-bottom: $spacing-sm;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Responsive design
+@include mobile {
+  .rsvp {
+    padding: $spacing-xl 0;
+
+    .container {
+      padding: 0 $spacing-md;
+    }
+
+    .title {
+      font-size: $font-size-lg;
+    }
+
+    .subtitle {
+      font-size: $font-size-sm;
+    }
+
+    .formGroup {
+      gap: $spacing-xs;
+
+      input,
+      select,
+      textarea {
+        padding: $spacing-xs $spacing-sm;
+        font-size: $font-size-sm;
+      }
+    }
+
+    .submitButton {
+      min-width: 180px;
+    }
+  }
+}

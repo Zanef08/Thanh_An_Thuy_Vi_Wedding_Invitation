@@ -1,112 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styles from './ImageSlider.module.scss';
 
 const ImageSlider = () => {
-  // Danh sách tất cả hình ảnh từ folder assets
+  // Danh sách hình ảnh mới từ folder assets
   const images = [
-    '/assets/FTW00404.JPG',
-    '/assets/FTW01085.JPG',
-    '/assets/FTW01578.JPG',
-    '/assets/FTW01086.JPG',
-    '/assets/FTW01576.JPG',
-    '/assets/FTW01560.JPG',
-    '/assets/FTW01575.JPG',
-    '/assets/FTW01582.JPG',
-    '/assets/FTW01579.JPG',
-    '/assets/FTW01087.JPG',
-    '/assets/FTW01089.JPG',
-    '/assets/FTW01577.JPG',
-    '/assets/FTW00567.JPG',
-    '/assets/FTW01580.JPG',
-    '/assets/FTW01581.JPG',
-    '/assets/FTW00569.JPG',
-    '/assets/FTW00570.JPG',
-    '/assets/FTW00576.JPG',
-    '/assets/FTW00579.JPG',
-    '/assets/FTW00577.JPG',
-    '/assets/FTW00581.JPG',
-    '/assets/FTW00582.JPG',
-    '/assets/FTW00580.JPG',
-    '/assets/FTW00578.JPG',
-    '/assets/FTW01594.JPG',
-    '/assets/FTW00584.JPG',
-    '/assets/FTW00585.JPG',
-    '/assets/FTW01600.JPG',
-    '/assets/FTW00583.JPG',
-    '/assets/FTW01598.JPG',
-    '/assets/FTW01597.JPG',
-    '/assets/FTW01596.JPG',
-    '/assets/FTW00586.JPG',
-    '/assets/FTW00589.JPG',
-    '/assets/FTW01603.JPG',
-    '/assets/FTW01602.JPG',
-    '/assets/FTW01599.JPG',
-    '/assets/FTW01116.JPG',
-    '/assets/FTW01601.JPG',
-    '/assets/FTW00594.JPG',
-    '/assets/FTW01604.JPG',
-    '/assets/FTW00595.JPG',
-    '/assets/FTW01117.JPG',
-    '/assets/FTW01606.JPG',
-    '/assets/FTW00599.JPG',
-    '/assets/FTW01608.JPG',
-    '/assets/FTW01607.JPG',
-    '/assets/FTW01605.JPG',
-    '/assets/FTW01610.JPG',
-    '/assets/FTW01123.JPG',
-    '/assets/FTW01611.JPG',
-    '/assets/FTW01609.JPG',
-    '/assets/FTW00605.JPG',
-    '/assets/FTW00600.JPG',
-    '/assets/FTW00598.JPG',
-    '/assets/FTW00604.JPG',
-    '/assets/FTW00603.JPG',
-    '/assets/FTW01617.JPG',
-    '/assets/FTW01129.JPG',
-    '/assets/FTW01619.JPG',
-    '/assets/FTW01131.JPG',
-    '/assets/FTW01621.JPG',
-    '/assets/FTW01132.JPG',
-    '/assets/FTW01618.JPG',
-    '/assets/FTW01133.JPG',
-    '/assets/FTW01628.JPG',
-    '/assets/FTW01136.JPG',
-    '/assets/FTW01637.JPG',
-    '/assets/FTW01143.JPG',
-    '/assets/FTW01649.JPG',
-    '/assets/FTW01645.JPG',
-    '/assets/FTW01646.JPG',
-    '/assets/FTW01158.JPG',
-    '/assets/FTW01651.JPG',
-    '/assets/FTW01652.JPG',
-    '/assets/FTW01656.JPG',
-    '/assets/FTW01650.JPG',
-    '/assets/FTW01163.JPG',
-    '/assets/FTW01660.JPG',
-    '/assets/FTW00644.JPG',
-    '/assets/FTW01659.JPG',
-    '/assets/FTW01663.JPG',
-    '/assets/FTW01661.JPG',
-    '/assets/FTW01172.JPG',
-    '/assets/FTW00649.JPG',
-    '/assets/FTW01173.JPG',
-    '/assets/FTW00647.JPG',
-    '/assets/FTW01662.JPG',
-    '/assets/FTW01674.JPG',
-    '/assets/FTW00658.JPG',
-    '/assets/FTW01174.JPG',
-    '/assets/FTW01670.JPG',
-    '/assets/FTW01669.JPG',
-    '/assets/FTW01178.JPG',
-    '/assets/FTW01673.JPG',
-    '/assets/FTW01672.JPG',
-    '/assets/FTW01182.JPG',
-    '/assets/FTW00661.JPG',
-    '/assets/FTW01181.JPG',
-    '/assets/FTW01675.JPG',
+    '/assets/1.jpg',
+    '/assets/2.jpg',
+    '/assets/4.jpg',
+    '/assets/5.jpg',
+    '/assets/6.jpg'
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [currentX, setCurrentX] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const slideRef = useRef(null);
+  const modalRef = useRef(null);
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => 
@@ -124,14 +35,154 @@ const ImageSlider = () => {
     setCurrentIndex(index);
   };
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  };
+
+  // Touch events for swipe
+  const handleTouchStart = (e) => {
+    setIsDragging(true);
+    setStartX(e.touches[0].clientX);
+    setCurrentX(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging) return;
+    setCurrentX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!isDragging) return;
+    
+    const diff = startX - currentX;
+    const threshold = 50; // Minimum distance to trigger swipe
+    
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        // Swipe left - next slide
+        nextSlide();
+      } else {
+        // Swipe right - previous slide
+        prevSlide();
+      }
+    }
+    
+    setIsDragging(false);
+  };
+
+  // Mouse events for desktop swipe
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.clientX);
+    setCurrentX(e.clientX);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    setCurrentX(e.clientX);
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging) return;
+    
+    const diff = startX - currentX;
+    const threshold = 50;
+    
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
+    }
+    
+    setIsDragging(false);
+  };
+
+  const handleImageClick = (e) => {
+    e.stopPropagation();
+    openModal();
+  };
+
+  // Modal swipe events
+  const handleModalTouchStart = (e) => {
+    setIsDragging(true);
+    setStartX(e.touches[0].clientX);
+    setCurrentX(e.touches[0].clientX);
+  };
+
+  const handleModalTouchMove = (e) => {
+    if (!isDragging) return;
+    setCurrentX(e.touches[0].clientX);
+  };
+
+  const handleModalTouchEnd = () => {
+    if (!isDragging) return;
+    
+    const diff = startX - currentX;
+    const threshold = 50;
+    
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
+    }
+    
+    setIsDragging(false);
+  };
+
+  const handleModalMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.clientX);
+    setCurrentX(e.clientX);
+  };
+
+  const handleModalMouseMove = (e) => {
+    if (!isDragging) return;
+    setCurrentX(e.clientX);
+  };
+
+  const handleModalMouseUp = () => {
+    if (!isDragging) return;
+    
+    const diff = startX - currentX;
+    const threshold = 50;
+    
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
+    }
+    
+    setIsDragging(false);
+  };
+
   return (
     <div className={styles.imageSlider}>
-      <div className={styles.sliderHeader}>
-        <h3 className={styles.sliderTitle}>Thư viện ảnh</h3>
-        <p className={styles.sliderDescription}>
-          Những khoảnh khắc đẹp nhất của chúng tôi
-        </p>
+      <div className={styles.iconContainer}>
+        <svg className={styles.icon} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M23 19C23 19.5304 22.7893 20.0391 22.4142 20.4142C22.0391 20.7893 21.5304 21 21 21H3C2.46957 21 1.96086 20.7893 1.58579 20.4142C1.21071 20.0391 1 19.5304 1 19V8C1 7.46957 1.21071 6.96086 1.58579 6.58579C1.96086 6.21071 2.46957 6 3 6H7L9 3H15L17 6H21C21.5304 6 22.0391 6.21071 22.4142 6.58579C22.7893 6.96086 23 7.46957 23 8V19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M12 17C14.2091 17 16 15.2091 16 13C16 10.7909 14.2091 9 12 9C9.79086 9 8 10.7909 8 13C8 15.2091 9.79086 17 12 17Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
       </div>
+      <h3 className={styles.sliderTitle}>Thư viện ảnh</h3>
+      <p className={styles.sliderDescription}>
+        Những khoảnh khắc đẹp nhất của chúng tôi
+      </p>
 
       <div className={styles.sliderContainer}>
         <button 
@@ -144,11 +195,23 @@ const ImageSlider = () => {
           </svg>
         </button>
 
-        <div className={styles.slideContainer}>
+        <div 
+          className={styles.slideContainer}
+          ref={slideRef}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+        >
           <img 
             src={images[currentIndex]} 
             alt={`Ảnh ${currentIndex + 1}`}
             className={styles.slideImage}
+            draggable={false}
+            onClick={handleImageClick}
           />
           <div className={styles.slideInfo}>
             <span className={styles.slideCounter}>
@@ -167,6 +230,54 @@ const ImageSlider = () => {
           </svg>
         </button>
       </div>
+
+      {/* Dots Navigation */}
+      <div className={styles.dotsContainer}>
+        {images.map((_, index) => (
+          <button
+            key={index}
+            className={`${styles.dot} ${index === currentIndex ? styles.activeDot : ''}`}
+            onClick={() => goToSlide(index)}
+            aria-label={`Go to image ${index + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className={styles.modal} onClick={closeModal}>
+          <div 
+            className={styles.modalContent} 
+            onClick={(e) => e.stopPropagation()}
+            ref={modalRef}
+            onTouchStart={handleModalTouchStart}
+            onTouchMove={handleModalTouchMove}
+            onTouchEnd={handleModalTouchEnd}
+            onMouseDown={handleModalMouseDown}
+            onMouseMove={handleModalMouseMove}
+            onMouseUp={handleModalMouseUp}
+            onMouseLeave={handleModalMouseUp}
+          >
+            <button className={styles.closeButton} onClick={closeModal}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+            <img 
+              src={images[currentIndex]} 
+              alt={`Ảnh ${currentIndex + 1}`}
+              className={styles.modalImage}
+              draggable={false}
+            />
+            <div className={styles.modalInfo}>
+              <span className={styles.modalCounter}>
+                {currentIndex + 1} / {images.length}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

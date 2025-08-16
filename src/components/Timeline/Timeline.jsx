@@ -26,9 +26,23 @@ const Timeline = () => {
     },
     {
       number: 4,
-      title: 'TIỆC TÙNG',
+      title: 'TIỆC CƯỚI NHÀ NAM',
       time: '18:30',
-      description: 'Bữa tiệc tối thịnh soạn với những món ăn ngon và không khí vui vẻ, ấm cúng cùng gia đình.',
+      description: 'Bữa tiệc tối thịnh soạn tại nhà chú rể với những món ăn ngon và không khí vui vẻ, ấm cúng cùng gia đình.',
+      position: 'right'
+    },
+    {
+      number: 5,
+      title: 'TIỆC CƯỚI NHÀ NỮ',
+      time: '19:00',
+      description: 'Bữa tiệc tối tại nhà cô dâu với những món ăn truyền thống và không khí gia đình đầy ấm áp.',
+      position: 'left'
+    },
+    {
+      number: 6,
+      title: 'TIỆC TÙNG CHUNG',
+      time: '20:00',
+      description: 'Bữa tiệc tối chung với tất cả khách mời tại nhà hàng, nơi mọi người cùng nhau chúc mừng và chia sẻ niềm vui.',
       position: 'right'
     }
   ];

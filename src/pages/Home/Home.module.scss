@@ -287,6 +287,36 @@
   }
 }
 
+// RSVP Section
+.rsvpSection {
+  padding: $spacing-3xl 0;
+  background-color: $color-background;
+  
+  @include tablet-up {
+    padding: $spacing-4xl 0;
+  }
+}
+
+// Wedding Gift Section
+.giftSection {
+  padding: $spacing-3xl 0;
+  background-color: $color-background;
+  
+  @include tablet-up {
+    padding: $spacing-4xl 0;
+  }
+}
+
+// Guest Book Section
+.guestBookSection {
+  padding: $spacing-3xl 0;
+  background-color: $color-background;
+  
+  @include tablet-up {
+    padding: $spacing-4xl 0;
+  }
+}
+
 // Bottom Photo Section
 .bottomPhoto {
   height: 60vh;

@@ -4,10 +4,13 @@ import Countdown from '../../components/Countdown';
 import EventSection from '../../components/EventSection';
 import Timeline from '../../components/Timeline';
 import ImageSlider from '../../components/ImageSlider';
+import RSVP from '../../components/RSVP';
+import WeddingGift from '../../components/WeddingGift';
+import GuestBook from '../../components/GuestBook';
 import { ChurchIcon, ChampagneIcon } from '../../components/Icons';
 // Sử dụng hình ảnh thật từ folder assets
-const heroImage = '/assets/FTW01545.JPG';
-const bottomImage = '/assets/FTW01290.JPG';
+const heroImage = '/assets/4.jpg';
+const bottomImage = '/assets/5.jpg';
 import styles from './Home.module.scss';
 
 const Home = () => {
@@ -120,6 +123,21 @@ const Home = () => {
            <Timeline />
          </motion.div>
        </section>
+
+      {/* RSVP Section */}
+      <section className={styles.rsvpSection}>
+        <RSVP />
+      </section>
+
+      {/* Wedding Gift Section */}
+      <section className={styles.giftSection}>
+        <WeddingGift />
+      </section>
+
+      {/* Guest Book Section */}
+      <section className={styles.guestBookSection}>
+        <GuestBook />
+      </section>
 
       {/* Bottom Couple Photo */}
       <section className={styles.bottomPhoto}>
