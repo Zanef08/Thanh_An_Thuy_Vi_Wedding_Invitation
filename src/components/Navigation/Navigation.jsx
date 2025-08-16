@@ -44,12 +44,22 @@ const Navigation = () => {
         }
       }
 
-      // Show navigation after scrolling down a bit
-      setIsVisible(window.scrollY > 300);
+      // Show navigation after scrolling down a bit (only on desktop/tablet)
+      const isMobile = window.innerWidth < 576;
+      setIsVisible(!isMobile && window.scrollY > 300);
     };
 
+    // Set initial visibility based on screen size
+    const isMobile = window.innerWidth < 576;
+    setIsVisible(!isMobile);
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
   }, [sections]);
 
   const scrollToSection = (sectionId) => {
