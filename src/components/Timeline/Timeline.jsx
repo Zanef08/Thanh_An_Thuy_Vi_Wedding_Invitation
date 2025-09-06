@@ -6,7 +6,7 @@ const Timeline = () => {
     {
       number: 1,
       title: 'LỄ CƯỚI',
-      time: '15:30',
+      time: '5:00',
       description: 'Buổi lễ trang trọng tại nhà thờ, nơi chúng tôi trao nhau lời hứa yêu thương và gắn bó trọn đời.',
       position: 'left'
     },

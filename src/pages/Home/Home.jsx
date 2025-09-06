@@ -8,9 +8,11 @@ import RSVP from '../../components/RSVP';
 import WeddingGift from '../../components/WeddingGift';
 import GuestBook from '../../components/GuestBook';
 import { ChurchIcon, ChampagneIcon } from '../../components/Icons';
+import { getImagePath } from '../../utils/imageUtils';
+
 // Sử dụng hình ảnh thật từ folder assets
-const heroImage = '/assets/4.jpg';
-const bottomImage = '/assets/5.jpg';
+const heroImage = getImagePath('FTW01782.jpg');
+const bottomImage = getImagePath('FTW02724.jpg');
 import styles from './Home.module.scss';
 
 const Home = () => {
@@ -148,7 +150,7 @@ const Home = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
-                Thanh An & Thuy Vi
+                Thanh An - Thuy Vi
               </motion.h2>
               <motion.p 
                 className={styles.date}
@@ -219,8 +221,8 @@ const Home = () => {
         >
           <EventSection
             title="Lễ Cưới"
-            time="15:00 giờ"
-            location="Nhà thờ"
+            time="5:00 giờ"
+            location="Nhà thờ Vũng Tàu"
             address="6 Thống Nhất, Vũng Tàu, Bà Rịa - Vũng Tàu"
             icon={ChurchIcon}
             onButtonClick={() => handleLocationClick("6 Thống Nhất, Vũng Tàu, Bà Rịa - Vũng Tàu")}
@@ -238,17 +240,17 @@ const Home = () => {
         >
           <EventSection
             title="Tiệc Cưới"
-            time="18:30 giờ"
-            location="Nhà hàng"
-            address="119 Đ. Hoàng Hoa Thám, Phường Thắng Tam, Vũng Tàu, Bà Rịa - Vũng Tàu"
+            time="17:30 giờ"
+            location="Nhà hàng Merastis"
+            address="356 Trương Công Định, Phường 8, Vũng Tàu, Bà Rịa - Vũng Tàu"
             icon={ChampagneIcon}
-            onButtonClick={() => handleLocationClick("119 Đ. Hoàng Hoa Thám, Phường Thắng Tam, Vũng Tàu, Bà Rịa - Vũng Tàu")}
+            onButtonClick={() => handleLocationClick("356 Trương Công Định, Phường 8, Vũng Tàu, Bà Rịa - Vũng Tàu")}
           />
         </motion.div>
       </section>
 
       {/* Timeline Section */}
-      <section id="timeline" className={styles.timelineSection}>
+      {/* <section id="timeline" className={styles.timelineSection}>
         <motion.div
           variants={sectionVariants}
           initial="hidden"
@@ -257,7 +259,7 @@ const Home = () => {
         >
           <Timeline />
         </motion.div>
-      </section>
+      </section> */}
 
       {/* RSVP Section */}
       <section id="rsvp" className={styles.rsvpSection}>

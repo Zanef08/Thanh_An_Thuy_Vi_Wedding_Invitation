@@ -7,14 +7,32 @@
   scroll-behavior: smooth;
   position: relative;
   
-  // Add a subtle gradient background for better visual flow
-  background: linear-gradient(180deg, 
+  // Enhanced gradient background with warm beige tones
+  background: linear-gradient(135deg, 
     $color-background 0%, 
-    rgba(255, 255, 255, 0.95) 25%,
-    rgba(255, 255, 255, 0.98) 50%,
-    rgba(255, 255, 255, 0.95) 75%,
+    $color-background-accent 15%,
+    rgba(255, 255, 255, 0.90) 30%,
+    $color-accent-light 45%,
+    rgba(255, 255, 255, 0.85) 60%,
+    $color-background-secondary 75%,
     $color-background 100%
   );
+  
+  // Add subtle texture overlay
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 80%, rgba(238, 209, 166, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(230, 196, 154, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(245, 225, 196, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
 }
 
 // Hero Section
@@ -32,25 +50,19 @@
     min-height: 800px;
   }
   
-  // Add connection line to next section
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 80px;
-    background: linear-gradient(to bottom, transparent, $color-text-primary);
-    z-index: 10;
-  }
 }
 
 .heroImage {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
-  background-size: COVER;
+  background: linear-gradient(135deg, 
+    $color-background-accent 0%, 
+    $color-accent-light 25%,
+    #f5f5f5 50%,
+    $color-background-secondary 75%,
+    #e0e0e0 100%
+  );
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
@@ -64,9 +76,26 @@
     bottom: 0;
     background: linear-gradient(
       to bottom,
-      rgba(0, 0, 0, 0.1) 0%,
-      rgba(0, 0, 0, 0.3) 50%,
-      rgba(0, 0, 0, 0.6) 100%
+      rgba(45, 45, 45, 0.05) 0%,
+      rgba(45, 45, 45, 0.15) 30%,
+      rgba(45, 45, 45, 0.25) 60%,
+      rgba(45, 45, 45, 0.4) 100%
+    );
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 0%,
+      transparent 40%,
+      rgba(184, 134, 11, 0.1) 70%,
+      rgba(45, 45, 45, 0.2) 100%
     );
   }
 }
@@ -89,7 +118,7 @@
 
 .announcement {
   @include heading-primary;
-  font-family: $font-family-title;
+  font-family: 'Borel', cursive, $font-family-title;
   font-style: italic;
   font-size: $font-size-lg;
   text-transform: uppercase;
@@ -108,29 +137,38 @@
 
 .coupleNames {
   @include heading-script;
-  font-family: $font-family-title;
+  font-family: 'Grand Hotel', cursive, $font-family-title;
   font-style: italic;
-  font-size: $font-size-3xl;
+  font-weight: 300;
+  font-size: $font-size-5xl;
   margin-bottom: $spacing-lg;
   color: $color-white;
   line-height: 1.2;
+  text-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 4px 8px rgba(0, 0, 0, 0.2),
+    0 8px 16px rgba(0, 0, 0, 0.1);
+  letter-spacing: 1px;
   
   @include mobile {
-    font-size: $font-size-2xl;
+    font-size: $font-size-4xl;
+    text-shadow: 
+      0 1px 2px rgba(0, 0, 0, 0.3),
+      0 2px 4px rgba(0, 0, 0, 0.2);
   }
   
   @include tablet-up {
-    font-size: $font-size-4xl;
+    font-size: $font-size-6xl;
   }
   
   @include desktop-up {
-    font-size: $font-size-5xl;
+    font-size: 6rem;
   }
 }
 
 .date {
   @include body-text;
-  font-family: $font-family-title;
+  font-family: 'Borel', cursive, $font-family-title;
   font-style: italic;
   font-size: $font-size-lg;
   color: $color-white;
@@ -147,29 +185,6 @@
   padding-top: $spacing-3xl;
   position: relative;
   
-  // Connection line from hero
-  &::before {
-    content: '';
-    position: absolute;
-    top: -80px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 80px;
-    background: linear-gradient(to bottom, $color-text-primary, transparent);
-  }
-  
-  // Connection line to next section
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, transparent, $color-text-primary);
-  }
 }
 
 // Date Section
@@ -182,29 +197,6 @@
     padding: $spacing-4xl 0;
   }
   
-  // Connection line from countdown
-  &::before {
-    content: '';
-    position: absolute;
-    top: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, $color-text-primary, transparent);
-  }
-  
-  // Connection line to next section
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, transparent, $color-text-primary);
-  }
 }
 
 .dateContent {
@@ -213,6 +205,7 @@
 
 .invitationText {
   @include body-text;
+  font-family: 'Borel', cursive, $font-family-title;
   font-size: $font-size-lg;
   margin-bottom: $spacing-2xl;
   line-height: 1.6;
@@ -254,6 +247,7 @@
 .dayName,
 .monthName {
   @include heading-primary;
+  font-family: 'Borel', cursive, $font-family-title;
   font-size: $font-size-base;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -272,6 +266,7 @@
 
 .dayNumber {
   @include heading-primary;
+  font-family: 'Borel', cursive, $font-family-title;
   font-size: $font-size-4xl;
   font-weight: $font-weight-bold;
   color: $color-text-primary;
@@ -292,29 +287,6 @@
   background-color: $color-background;
   position: relative;
   
-  // Connection line from date section
-  &::before {
-    content: '';
-    position: absolute;
-    top: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, $color-text-primary, transparent);
-  }
-  
-  // Connection line to next section
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, transparent, $color-text-primary);
-  }
 }
 
 // Party Section
@@ -322,29 +294,6 @@
   background-color: $color-background;
   position: relative;
   
-  // Connection line from ceremony section
-  &::before {
-    content: '';
-    position: absolute;
-    top: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, $color-text-primary, transparent);
-  }
-  
-  // Connection line to next section
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, transparent, $color-text-primary);
-  }
 }
 
 // Timeline Section
@@ -357,29 +306,6 @@
     padding: $spacing-4xl 0;
   }
   
-  // Connection line from party section
-  &::before {
-    content: '';
-    position: absolute;
-    top: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, $color-text-primary, transparent);
-  }
-  
-  // Connection line to next section
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, transparent, $color-text-primary);
-  }
 }
 
 .timeline {
@@ -398,9 +324,25 @@
   align-items: center;
   gap: $spacing-lg;
   padding: $spacing-lg;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: $border-radius-lg;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: $border-radius-xl;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+      0 12px 40px rgba(0, 0, 0, 0.15),
+      0 6px 20px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.8);
+  }
   
   @include tablet-up {
     padding: $spacing-xl;
@@ -420,6 +362,7 @@
 
 .timelineTime {
   @include heading-primary;
+  font-family: 'Borel', cursive, $font-family-title;
   font-size: $font-size-lg;
   font-weight: $font-weight-semibold;
   color: $color-text-primary;
@@ -433,6 +376,7 @@
 
 .timelineText {
   @include body-text;
+  font-family: 'Borel', cursive, $font-family-title;
   font-size: $font-size-base;
   color: $color-text-primary;
   flex: 1;
@@ -452,29 +396,6 @@
     padding: $spacing-4xl 0;
   }
   
-  // Connection line from timeline section
-  &::before {
-    content: '';
-    position: absolute;
-    top: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, $color-text-primary, transparent);
-  }
-  
-  // Connection line to next section
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, transparent, $color-text-primary);
-  }
 }
 
 // Wedding Gift Section
@@ -487,29 +408,6 @@
     padding: $spacing-4xl 0;
   }
   
-  // Connection line from RSVP section
-  &::before {
-    content: '';
-    position: absolute;
-    top: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, $color-text-primary, transparent);
-  }
-  
-  // Connection line to next section
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, transparent, $color-text-primary);
-  }
 }
 
 // Guest Book Section
@@ -522,29 +420,6 @@
     padding: $spacing-4xl 0;
   }
   
-  // Connection line from gift section
-  &::before {
-    content: '';
-    position: absolute;
-    top: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, $color-text-primary, transparent);
-  }
-  
-  // Connection line to next section
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, transparent, $color-text-primary);
-  }
 }
 
 // Bottom Photo Section
@@ -564,29 +439,6 @@
     min-height: 600px;
   }
   
-  // Connection line from guestbook section
-  &::before {
-    content: '';
-    position: absolute;
-    top: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, $color-text-primary, transparent);
-  }
-  
-  // Connection line to next section
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, transparent, $color-text-primary);
-  }
 }
 
 .bottomImage {
@@ -624,17 +476,6 @@
     padding: $spacing-4xl 0;
   }
   
-  // Connection line from bottom photo section
-  &::before {
-    content: '';
-    position: absolute;
-    top: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(to bottom, $color-text-primary, transparent);
-  }
 }
 
 // Bottom blur effect for hero image
@@ -653,16 +494,6 @@ section {
   }
 }
 
-// Visual connection lines between sections
-.sectionConnector {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 2px;
-  height: 60px;
-  background: linear-gradient(to bottom, $color-text-primary, transparent);
-  z-index: 1;
-}
 
 // Scroll progress indicator
 .scrollProgress {

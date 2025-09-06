@@ -1,23 +1,42 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './ImageSlider.module.scss';
+import { getAllImagePaths, preloadImages } from '../../utils/imageUtils';
 
 const ImageSlider = () => {
-  // Danh sách hình ảnh mới từ folder assets
-  const images = [
-    '/assets/1.jpg',
-    '/assets/2.jpg',
-    '/assets/4.jpg',
-    '/assets/5.jpg',
-    '/assets/6.jpg'
-  ];
+  // Sử dụng utility function để lấy danh sách hình ảnh
+  const images = getAllImagePaths();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [currentX, setCurrentX] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const slideRef = useRef(null);
   const modalRef = useRef(null);
+
+  // Preload images for better performance
+  useEffect(() => {
+    const preloadNextImages = async () => {
+      try {
+        // Preload first 5 images immediately
+        const initialImages = images.slice(0, 5);
+        await preloadImages(initialImages);
+        setImagesLoaded(true);
+        
+        // Preload remaining images in background
+        const remainingImages = images.slice(5);
+        if (remainingImages.length > 0) {
+          preloadImages(remainingImages).catch(console.error);
+        }
+      } catch (error) {
+        console.error('Error preloading images:', error);
+        setImagesLoaded(true); // Still show slider even if preloading fails
+      }
+    };
+
+    preloadNextImages();
+  }, [images]);
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => 
@@ -171,6 +190,26 @@ const ImageSlider = () => {
     setIsDragging(false);
   };
 
+  // Show loading state while images are being preloaded
+  if (!imagesLoaded) {
+    return (
+      <div className={styles.imageSlider}>
+        <div className={styles.iconContainer}>
+          <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21,15 16,10 5,21"></polyline>
+          </svg>
+        </div>
+        <h2 className={styles.sliderTitle}>Thư viện ảnh</h2>
+        <p className={styles.sliderDescription}>Đang tải hình ảnh...</p>
+        <div className={styles.loadingContainer}>
+          <div className={styles.loadingSpinner}></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.imageSlider}>
       <div className={styles.iconContainer}>
@@ -231,17 +270,6 @@ const ImageSlider = () => {
         </button>
       </div>
 
-      {/* Dots Navigation */}
-      <div className={styles.dotsContainer}>
-        {images.map((_, index) => (
-          <button
-            key={index}
-            className={`${styles.dot} ${index === currentIndex ? styles.activeDot : ''}`}
-            onClick={() => goToSlide(index)}
-            aria-label={`Go to image ${index + 1}`}
-          />
-        ))}
-      </div>
 
       {/* Modal */}
       {isModalOpen && (

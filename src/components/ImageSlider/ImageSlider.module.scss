@@ -28,7 +28,7 @@
 
 .sliderTitle {
   @include heading-primary;
-  font-family: $font-family-title;
+  font-family: 'Borel', cursive, $font-family-title;
   font-style: italic;
   font-size: $font-size-xl;
   color: $color-text-primary;
@@ -44,6 +44,7 @@
 
 .sliderDescription {
   @include body-text;
+  font-family: 'Borel', cursive, $font-family-title;
   font-size: $font-size-base;
   color: $color-text-secondary;
   max-width: 600px;
@@ -103,8 +104,27 @@
 
 .slideCounter {
   font-size: $font-size-sm;
-  font-weight: $font-weight-medium;
-  opacity: 0.9;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.loadingContainer {
+  @include flex-center;
+  padding: $spacing-4xl 0;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top: 3px solid $color-text-primary;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .sliderButton {

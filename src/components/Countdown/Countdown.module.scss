@@ -13,7 +13,7 @@
 
 .title {
   @include heading-primary;
-  font-family: $font-family-title;
+  font-family: 'Borel', cursive, $font-family-title;
   font-style: italic;
   font-size: $font-size-xl;
   text-transform: uppercase;
@@ -48,6 +48,7 @@
 
 .number {
   @include heading-primary;
+  font-family: 'Borel', cursive, $font-family-title;
   font-size: $font-size-4xl;
   font-weight: $font-weight-bold;
   line-height: 1;
@@ -64,6 +65,7 @@
 
 .label {
   @include body-text;
+  font-family: 'Borel', cursive, $font-family-title;
   font-size: $font-size-sm;
   text-transform: lowercase;
   color: $color-text-primary;

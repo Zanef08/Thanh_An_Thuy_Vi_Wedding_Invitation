@@ -5,6 +5,19 @@
   @include flex-column-center;
   padding: $spacing-2xl 0;
   text-align: center;
+  position: relative;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: $border-radius-xl;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+      0 16px 48px rgba(0, 0, 0, 0.12),
+      0 6px 20px rgba(0, 0, 0, 0.06);
+    background: rgba(255, 255, 255, 0.8);
+  }
   
   @include tablet-up {
     padding: $spacing-3xl 0;
@@ -19,10 +32,12 @@
 .icon {
   width: 48px;
   height: 48px;
-  color: $color-text-primary;
+  color: $color-primary;
   stroke: currentColor;
   stroke-width: 1.5;
   fill: none;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(184, 134, 11, 0.2));
   
   @include tablet-up {
     width: 56px;
@@ -30,9 +45,15 @@
   }
 }
 
+.eventSection:hover .icon {
+  color: $color-primary-light;
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(184, 134, 11, 0.3));
+}
+
 .title {
   @include heading-primary;
-  font-family: $font-family-title;
+  font-family: 'Borel', cursive, $font-family-title;
   font-style: italic;
   font-size: $font-size-xl;
   margin-bottom: $spacing-lg;
@@ -52,6 +73,7 @@
 
 .timeLocation {
   @include body-text;
+  font-family: 'Borel', cursive, $font-family-title;
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
   color: $color-text-primary;
@@ -63,6 +85,7 @@
 
 .address {
   @include body-text;
+  font-family: 'Borel', cursive, $font-family-title;
   font-size: $font-size-sm;
   color: $color-text-primary;
   line-height: 1.4;

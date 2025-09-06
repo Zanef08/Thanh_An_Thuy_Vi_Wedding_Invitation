@@ -156,18 +156,6 @@ const RSVP = () => {
               </div>
             </div>
 
-            <div className={styles.formGroup}>
-              <label htmlFor="dietaryRestrictions">Yêu cầu đặc biệt về ăn uống</label>
-              <textarea
-                id="dietaryRestrictions"
-                name="dietaryRestrictions"
-                value={formData.dietaryRestrictions}
-                onChange={handleInputChange}
-                placeholder="Ví dụ: Ăn chay, dị ứng thực phẩm..."
-                rows="2"
-              />
-            </div>
-
             <Button type="submit" className={styles.submitButton}>
               Gửi Xác Nhận
             </Button>

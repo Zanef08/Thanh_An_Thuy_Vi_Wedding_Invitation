@@ -5,6 +5,22 @@
   @include flex-column-center;
   padding: $spacing-2xl 0;
   text-align: center;
+  position: relative;
+  
+  // Add subtle background pattern
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(184, 134, 11, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
   
   @include tablet-up {
     padding: $spacing-3xl 0;
@@ -14,6 +30,24 @@
 .container {
   @include container;
   max-width: 600px;
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: $border-radius-xl;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.1),
+    0 8px 24px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  padding: $spacing-3xl;
+  margin: $spacing-xl;
+  
+  @include tablet-up {
+    padding: $spacing-4xl;
+    margin: $spacing-2xl;
+  }
 }
 
 .iconContainer {
@@ -37,7 +71,7 @@
 
 .title {
   @include heading-primary;
-  font-family: $font-family-title;
+  font-family: 'Borel', cursive, $font-family-title;
   font-style: italic;
   font-size: $font-size-xl;
   margin-bottom: $spacing-lg;
@@ -51,6 +85,7 @@
 
 .subtitle {
   @include body-text;
+  font-family: 'Borel', cursive, $font-family-title;
   font-size: $font-size-base;
   color: $color-text-primary;
   margin-bottom: $spacing-xl;
@@ -66,6 +101,10 @@
   flex-direction: column;
   gap: $spacing-lg;
   margin-bottom: $spacing-xl;
+  
+  @include mobile {
+    gap: $spacing-xl;
+  }
 }
 
 .formGroup {
@@ -75,6 +114,7 @@
   text-align: left;
 
   label {
+    font-family: 'Borel', cursive, $font-family-title;
     font-weight: $font-weight-medium;
     color: $color-text-primary;
     font-size: $font-size-sm;
@@ -83,28 +123,56 @@
   input,
   select,
   textarea {
-    padding: $spacing-sm $spacing-md;
-    border: 1px solid #e1e5e9;
-    border-radius: $border-radius-md;
+    padding: 16px 20px;
+    border: 2px solid $color-border-light;
+    border-radius: $border-radius-xl;
     font-size: $font-size-base;
-    transition: $transition-base;
-    background: white;
-    font-family: $font-family-primary;
+    font-weight: $font-weight-medium;
+    line-height: 1.5;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-family: 'Borel', cursive, $font-family-primary;
+    height: 56px;
+    color: $color-text-primary;
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    box-sizing: border-box;
 
     &:focus {
       outline: none;
-      border-color: $color-text-primary;
-      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+      border-color: $color-primary;
+      box-shadow: 
+        0 0 0 4px rgba(184, 134, 11, 0.1),
+        0 8px 24px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    &:hover {
+      border-color: $color-accent;
+      box-shadow: 
+        0 6px 16px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      transform: translateY(-1px);
     }
 
     &::placeholder {
-      color: #9ca3af;
+      color: $color-text-muted;
+      font-style: italic;
+      font-weight: $font-weight-normal;
+      opacity: 0.7;
     }
   }
 
   textarea {
     resize: vertical;
-    min-height: 80px;
+    min-height: 100px;
+    align-items: flex-start;
+    padding-top: $spacing-md;
   }
 }
 
@@ -118,28 +186,61 @@
 .radioLabel {
   display: flex;
   align-items: center;
-  gap: $spacing-sm;
+  gap: $spacing-lg;
   cursor: pointer;
-  padding: $spacing-sm $spacing-md;
-  border: 1px solid #e1e5e9;
-  border-radius: $border-radius-md;
-  transition: $transition-base;
-  background: white;
+  padding: $spacing-lg $spacing-xl;
+  border: 2px solid $color-border-light;
+  border-radius: $border-radius-xl;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  min-height: 56px;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
 
   &:hover {
-    border-color: $color-text-primary;
+    border-color: $color-accent;
+    transform: translateY(-2px);
+    box-shadow: 
+      0 8px 24px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  &.selected {
+    border-color: $color-primary;
+    background: rgba(184, 134, 11, 0.05);
+    box-shadow: 
+      0 8px 24px rgba(184, 134, 11, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
   }
 
   input[type="radio"] {
-    width: 16px;
-    height: 16px;
-    accent-color: $color-text-primary;
+    width: 24px;
+    height: 24px;
+    accent-color: $color-primary;
     margin: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:checked {
+      transform: scale(1.1);
+    }
   }
 
   .radioText {
-    font-weight: $font-weight-normal;
+    font-family: 'Borel', cursive, $font-family-title;
+    font-weight: $font-weight-medium;
     color: $color-text-primary;
+    font-size: $font-size-base;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  &:hover .radioText {
+    color: $color-primary;
   }
 }
 
@@ -207,7 +308,8 @@
     padding: $spacing-xl 0;
 
     .container {
-      padding: 0 $spacing-md;
+      padding: 0 $spacing-lg;
+      max-width: 100%;
     }
 
     .title {
@@ -219,18 +321,94 @@
     }
 
     .formGroup {
-      gap: $spacing-xs;
+      gap: $spacing-sm;
+
+      label {
+        font-size: $font-size-base;
+        font-weight: $font-weight-semibold;
+      }
 
       input,
       select,
       textarea {
-        padding: $spacing-xs $spacing-sm;
-        font-size: $font-size-sm;
+        padding: $spacing-md $spacing-lg;
+        font-size: $font-size-base;
+        border-radius: $border-radius-lg;
+        border: 2px solid #e1e5e9;
+        min-height: 48px;
+        transition: all 0.3s ease;
+
+        &:focus {
+          border-color: $color-text-primary;
+          box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+          transform: translateY(-1px);
+        }
+
+        &:hover {
+          border-color: #cbd5e1;
+        }
+      }
+
+      textarea {
+        min-height: 100px;
+        padding: $spacing-md $spacing-lg;
+      }
+    }
+
+    .radioGroup {
+      gap: $spacing-sm;
+    }
+
+    .radioLabel {
+      padding: $spacing-md $spacing-lg;
+      border-radius: $border-radius-lg;
+      border: 2px solid #e1e5e9;
+      min-height: 48px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        border-color: #cbd5e1;
+        transform: translateY(-1px);
+      }
+
+      input[type="radio"] {
+        width: 18px;
+        height: 18px;
+      }
+
+      .radioText {
+        font-size: $font-size-base;
+        font-weight: $font-weight-medium;
       }
     }
 
     .submitButton {
-      min-width: 180px;
+      min-width: 200px;
+      padding: $spacing-md $spacing-xl;
+      font-size: $font-size-base;
+      font-weight: $font-weight-semibold;
+      border-radius: $border-radius-lg;
+    }
+
+    .successMessage {
+      padding: $spacing-lg;
+
+      .successIcon {
+        width: 70px;
+        height: 70px;
+        font-size: 2.2rem;
+        margin-bottom: $spacing-lg;
+      }
+
+      h3 {
+        font-size: $font-size-lg;
+        margin-bottom: $spacing-md;
+      }
+
+      p {
+        font-size: $font-size-sm;
+        line-height: 1.5;
+      }
     }
   }
 }

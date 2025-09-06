@@ -37,7 +37,7 @@
 
 .title {
   @include heading-primary;
-  font-family: $font-family-title;
+  font-family: 'Borel', cursive, $font-family-title;
   font-style: italic;
   font-size: $font-size-xl;
   margin-bottom: $spacing-lg;
@@ -51,6 +51,7 @@
 
 .subtitle {
   @include body-text;
+  font-family: 'Borel', cursive, $font-family-title;
   font-size: $font-size-base;
   color: $color-text-primary;
   margin-bottom: $spacing-xl;
@@ -71,7 +72,7 @@
 .formSection,
 .entriesSection {
   .sectionTitle {
-    font-family: $font-family-title;
+    font-family: 'Borel', cursive, $font-family-title;
     font-style: italic;
     font-size: $font-size-lg;
     font-weight: $font-weight-semibold;
@@ -107,6 +108,7 @@
   text-align: left;
 
   label {
+    font-family: 'Borel', cursive, $font-family-title;
     font-weight: $font-weight-medium;
     color: $color-text-primary;
     font-size: $font-size-sm;
@@ -114,28 +116,46 @@
 
   input,
   textarea {
-    padding: $spacing-sm $spacing-md;
-    border: 1px solid #e1e5e9;
-    border-radius: $border-radius-md;
+    padding: $spacing-md $spacing-lg;
+    border: 2px solid #e1e5e9;
+    border-radius: $border-radius-lg;
     font-size: $font-size-base;
-    transition: $transition-base;
+    font-weight: $font-weight-medium;
+    line-height: 1.4;
+    transition: all 0.3s ease;
     background: white;
-    font-family: $font-family-primary;
+    font-family: 'Borel', cursive, $font-family-primary;
+    color: $color-text-primary;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    min-height: 48px;
+    display: flex;
+    align-items: center;
 
     &:focus {
       outline: none;
       border-color: $color-text-primary;
-      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    &:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
     }
 
     &::placeholder {
       color: #9ca3af;
+      font-style: italic;
+      font-weight: $font-weight-normal;
+      opacity: 0.8;
     }
   }
 
   textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 120px;
+    align-items: flex-start;
+    padding-top: $spacing-md;
   }
 }
 
