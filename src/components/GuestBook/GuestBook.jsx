@@ -19,22 +19,16 @@ const GuestBook = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Set canvas size with proper scaling
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-    
-    canvas.width = 400 * dpr;
-    canvas.height = 120 * dpr;
+    // Set canvas size
+    canvas.width = 400;
+    canvas.height = 120;
     canvas.style.width = '100%';
     canvas.style.height = '120px';
 
     const context = canvas.getContext('2d');
-    context.scale(dpr, dpr);
     context.lineCap = 'round';
-    context.lineJoin = 'round';
     context.strokeStyle = '#333333';
     context.lineWidth = 2;
-    context.fillStyle = 'transparent';
     contextRef.current = context;
 
     // Load existing guestbook entries from API
@@ -66,48 +60,37 @@ const GuestBook = () => {
 
   const getCoordinates = (event) => {
     const canvas = canvasRef.current;
-    if (!canvas) return { x: 0, y: 0 };
-    
     const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-    
-    let clientX, clientY;
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
     
     if (event.touches && event.touches[0]) {
       // Touch event
-      clientX = event.touches[0].clientX;
-      clientY = event.touches[0].clientY;
+      const touch = event.touches[0];
+      return {
+        x: (touch.clientX - rect.left) * scaleX,
+        y: (touch.clientY - rect.top) * scaleY
+      };
     } else {
       // Mouse event
-      clientX = event.clientX;
-      clientY = event.clientY;
+      return {
+        x: (event.clientX - rect.left) * scaleX,
+        y: (event.clientY - rect.top) * scaleY
+      };
     }
-    
-    return {
-      x: (clientX - rect.left) * dpr,
-      y: (clientY - rect.top) * dpr
-    };
   };
 
   const startDrawing = (event) => {
     event.preventDefault();
-    event.stopPropagation();
-    
-    if (!contextRef.current) return;
-    
     setIsDrawing(true);
     const coords = getCoordinates(event);
-    
     contextRef.current.beginPath();
     contextRef.current.moveTo(coords.x, coords.y);
   };
 
   const draw = (event) => {
     event.preventDefault();
-    event.stopPropagation();
-    
-    if (!isDrawing || !contextRef.current) return;
-    
+    if (!isDrawing) return;
     const coords = getCoordinates(event);
     contextRef.current.lineTo(coords.x, coords.y);
     contextRef.current.stroke();
@@ -115,20 +98,12 @@ const GuestBook = () => {
 
   const stopDrawing = (event) => {
     event.preventDefault();
-    event.stopPropagation();
-    
-    if (!isDrawing) return;
-    
     setIsDrawing(false);
-    
-    if (contextRef.current) {
-      contextRef.current.closePath();
-    }
-    
+    contextRef.current.closePath();
     // Convert canvas to data URL for signature
     const canvas = canvasRef.current;
     if (canvas) {
-      setSignature(canvas.toDataURL('image/png'));
+      setSignature(canvas.toDataURL());
     }
   };
 
@@ -136,8 +111,7 @@ const GuestBook = () => {
     const canvas = canvasRef.current;
     const context = contextRef.current;
     if (canvas && context) {
-      const dpr = window.devicePixelRatio || 1;
-      context.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+      context.clearRect(0, 0, canvas.width, canvas.height);
       setSignature('');
     }
   };
@@ -221,12 +195,6 @@ const GuestBook = () => {
                   <canvas
                     ref={canvasRef}
                     className={styles.signatureCanvas}
-                    style={{
-                      border: '2px solid #e0e0e0',
-                      borderRadius: '8px',
-                      cursor: 'crosshair',
-                      touchAction: 'none'
-                    }}
                     onMouseDown={startDrawing}
                     onMouseMove={draw}
                     onMouseUp={stopDrawing}
@@ -240,14 +208,6 @@ const GuestBook = () => {
                       type="button"
                       onClick={clearSignature}
                       className={styles.clearButton}
-                      style={{
-                        padding: '8px 16px',
-                        backgroundColor: '#f5f5f5',
-                        border: '1px solid #ddd',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        fontSize: '14px'
-                      }}
                     >
                       Xóa chữ ký
                     </button>
