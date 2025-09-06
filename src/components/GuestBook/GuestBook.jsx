@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../Button';
+import { guestbookAPI, createGuestBookEntryWithSignature } from '../../utils/api';
 import styles from './GuestBook.module.scss';
 
 const GuestBook = () => {
@@ -9,6 +10,7 @@ const GuestBook = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isDrawing, setIsDrawing] = useState(false);
   const [signature, setSignature] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [guestEntries, setGuestEntries] = useState([]);
@@ -29,18 +31,30 @@ const GuestBook = () => {
     context.lineWidth = 2;
     contextRef.current = context;
 
-    // Load existing guestbook entries from localStorage
+    // Load existing guestbook entries from API
     loadGuestbookEntries();
   }, []);
 
-  const loadGuestbookEntries = () => {
+  const loadGuestbookEntries = async () => {
     try {
-      const storedEntries = localStorage.getItem('guestbookEntries');
-      if (storedEntries) {
-        setGuestEntries(JSON.parse(storedEntries));
-      }
+      const entries = await guestbookAPI.getAll();
+      // Transform API data to match component format
+      const transformedEntries = entries.map(entry => ({
+        id: entry.id,
+        name: entry.author,
+        message: entry.message,
+        signature: entry.photoUrl,
+        date: new Date(entry.timestamp).toISOString().split('T')[0],
+        time: new Date(entry.timestamp).toLocaleTimeString('vi-VN', {
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      }));
+      setGuestEntries(transformedEntries);
     } catch (error) {
       console.error('Error loading guestbook entries:', error);
+      // Fallback to empty array if API fails
+      setGuestEntries([]);
     }
   };
 
@@ -109,39 +123,46 @@ const GuestBook = () => {
       return;
     }
 
+    setIsUploading(true);
+
     try {
-      // Create new entry
-      const newEntry = {
-        id: Date.now().toString(),
-        name: guestName,
-        message: message,
-        signature: signature,
-        date: new Date().toISOString().split('T')[0],
-        time: new Date().toLocaleTimeString('vi-VN', {
-          hour: '2-digit',
-          minute: '2-digit'
-        })
-      };
-
-      // Add to localStorage
-      const updatedEntries = [newEntry, ...guestEntries];
-      localStorage.setItem('guestbookEntries', JSON.stringify(updatedEntries));
+      // Create entry with signature upload
+      const result = await createGuestBookEntryWithSignature(guestName, message, signature);
       
-      // Update state
-      setGuestEntries(updatedEntries);
-      setGuestName('');
-      setMessage('');
-      setSignature('');
-      clearSignature();
-      setIsSubmitted(true);
+      if (result.success) {
+        // Create new entry for local state
+        const newEntry = {
+          id: result.data.id,
+          name: guestName,
+          message: message,
+          signature: result.signatureUrl, // Use Supabase URL instead of base64
+          date: new Date().toISOString().split('T')[0],
+          time: new Date().toLocaleTimeString('vi-VN', {
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+        };
 
-      setTimeout(() => {
-        setIsSubmitted(false);
-      }, 2000);
+        // Update state
+        setGuestEntries([newEntry, ...guestEntries]);
+        setGuestName('');
+        setMessage('');
+        setSignature('');
+        clearSignature();
+        setIsSubmitted(true);
+
+        setTimeout(() => {
+          setIsSubmitted(false);
+        }, 2000);
+      } else {
+        throw new Error(result.error || 'Failed to create entry');
+      }
       
     } catch (error) {
       console.error('Guestbook submission error:', error);
       alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -218,8 +239,12 @@ const GuestBook = () => {
               </div>
 
 
-              <Button type="submit" className={styles.submitButton}>
-                Gửi Lời Chúc
+              <Button 
+                type="submit" 
+                className={styles.submitButton}
+                disabled={isUploading}
+              >
+                {isUploading ? 'Đang tải lên...' : 'Gửi Lời Chúc'}
               </Button>
             </form>
 

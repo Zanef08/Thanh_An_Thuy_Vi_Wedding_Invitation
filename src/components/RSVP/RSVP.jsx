@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Button from '../Button';
+import { rsvpAPI, formatRSVPData } from '../../utils/api';
 import styles from './RSVP.module.scss';
 
 const RSVP = () => {
@@ -27,19 +28,13 @@ const RSVP = () => {
     e.preventDefault();
     
     try {
-      // Create new RSVP entry
-      const newRsvp = {
-        id: Date.now().toString(),
-        ...formData,
-        submittedAt: new Date().toISOString()
-      };
-
-      // Store in localStorage
-      const existingRsvps = JSON.parse(localStorage.getItem('rsvpEntries') || '[]');
-      const updatedRsvps = [...existingRsvps, newRsvp];
-      localStorage.setItem('rsvpEntries', JSON.stringify(updatedRsvps));
-
-      console.log('RSVP submitted successfully:', newRsvp);
+      // Format data for API
+      const apiData = formatRSVPData(formData);
+      
+      // Submit to API
+      const response = await rsvpAPI.create(apiData);
+      
+      console.log('RSVP submitted successfully:', response);
       setIsSubmitted(true);
       
       // Reset form after 3 seconds
