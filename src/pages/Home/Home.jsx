@@ -238,7 +238,7 @@ const Home = () => {
             title="Lễ Cưới"
             time="5:00 giờ"
             location="Nhà thờ Vũng Tàu"
-            address="6 Thống Nhất, Vũng Tàu, Bà Rịa - Vũng Tàu"
+            address="6 Thống Nhất <br /> phường 1, Vũng Tàu <br /> Bà Rịa - Vũng Tàu"
             icon={ChurchIcon}
             onButtonClick={() => handleLocationClick("6 Thống Nhất, Vũng Tàu, Bà Rịa - Vũng Tàu")}
           />
@@ -257,7 +257,7 @@ const Home = () => {
             title="Tiệc Cưới"
             time="17:30 giờ"
             location="Nhà hàng Merastis"
-            address="356 Trương Công Định, Phường 8, Vũng Tàu, Bà Rịa - Vũng Tàu"
+            address="356 Trương Công Định<br />Phường 8, Vũng Tàu<br />Bà Rịa - Vũng Tàu"
             icon={ChampagneIcon}
             onButtonClick={() => handleLocationClick("356 Trương Công Định, Phường 8, Vũng Tàu, Bà Rịa - Vũng Tàu")}
           />
