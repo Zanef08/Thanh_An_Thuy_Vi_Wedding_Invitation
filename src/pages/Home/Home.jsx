@@ -9,15 +9,30 @@ import WeddingGift from '../../components/WeddingGift';
 import GuestBook from '../../components/GuestBook';
 import { ChurchIcon, ChampagneIcon } from '../../components/Icons';
 import { getImagePath } from '../../utils/imageUtils';
-
-// Sử dụng hình ảnh thật từ folder assets
-const heroImage = getImagePath('FTW01782.jpg');
-const bottomImage = getImagePath('FTW02724.jpg');
+import useResponsive from '../../hooks/useResponsive';
+import { responsiveImages } from '../../config/responsiveImages';
 import styles from './Home.module.scss';
 
 const Home = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('hero');
+  const { isMobile, isTablet, isDesktop } = useResponsive();
+
+  // Responsive images - different images for different screen sizes
+  const getHeroImage = () => {
+    if (isMobile) return getImagePath(responsiveImages.hero.mobile);
+    if (isTablet) return getImagePath(responsiveImages.hero.tablet);
+    return getImagePath(responsiveImages.hero.desktop);
+  };
+
+  const getBottomImage = () => {
+    if (isMobile) return getImagePath(responsiveImages.bottom.mobile);
+    if (isTablet) return getImagePath(responsiveImages.bottom.tablet);
+    return getImagePath(responsiveImages.bottom.desktop);
+  };
+
+  const heroImage = getHeroImage();
+  const bottomImage = getBottomImage();
 
   const sections = [
     { id: 'hero', label: 'Trang chủ' },
