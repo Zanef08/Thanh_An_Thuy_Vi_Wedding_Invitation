@@ -256,7 +256,7 @@ const Home = () => {
           <EventSection
             title="Tiệc Cưới"
             time="17:30 giờ"
-            location="Nhà hàng Merastis"
+            location="Sảnh Gold - Nhà hàng Merastis"
             address="356 Trương Công Định<br />Phường 8, Vũng Tàu<br />Bà Rịa - Vũng Tàu"
             icon={ChampagneIcon}
             onButtonClick={() => handleLocationClick("356 Trương Công Định, Phường 8, Vũng Tàu, Bà Rịa - Vũng Tàu")}
